@@ -24,9 +24,9 @@ static semtech_loramac_t loramac;  /* The loramac stack descriptor */
 static hts221_t hts221;
 
 /* Device and application parameters required for OTAA activation here */
+static const uint8_t deveui[LORAMAC_DEVEUI_LEN] = { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x04, 0xE5, 0xD6 };
 static const uint8_t appeui[LORAMAC_APPEUI_LEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-static const uint8_t deveui[LORAMAC_DEVEUI_LEN] = { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x04, 0xD2, 0x0F };
-static const uint8_t appkey[LORAMAC_APPKEY_LEN] = { 0x69, 0x34, 0x17, 0x73, 0x5D, 0x0D, 0xFF, 0x01, 0x90, 0x5C, 0xD7, 0xF5, 0x4A, 0x87, 0x33, 0xCE };
+static const uint8_t appkey[LORAMAC_APPKEY_LEN] = { 0x5D, 0xB1, 0x84, 0xC1, 0xBA, 0x19, 0x65, 0xD5, 0x46, 0xE0, 0xEC, 0xDA, 0x00, 0xB1, 0x3A, 0xCD };
 
 
 int main(void)
@@ -68,6 +68,10 @@ int main(void)
     }
     puts("Join procedure succeeded");
 
+    
+    printf("Chauffage connecté\n");
+    int chauffage = 22;
+    
     while (1) {
          /* do some measurements */
         uint16_t humidity = 0;
@@ -78,7 +82,16 @@ int main(void)
         if (hts221_read_temperature(&hts221, &temperature) != HTS221_OK) {
             puts("Cannot read temperature!");
         }
+        //
 
+          //temperature = chauffage;
+        
+        //
+        printf("Température interieur : %i° Celsus\n", temperature/10);
+
+        printf("A combien de degrés voulez vous regler le chauffage ?\n");
+        scanf("%i", &chauffage);
+        
         char message[64];
         sprintf(message, "H: %d.%d%%, T:%d.%dC",
                 (humidity / 10), (humidity % 10),

@@ -103,6 +103,12 @@ int main(void)
                 (humidity / 10), (humidity % 10),
                 (temperature / 10), (temperature % 10));
         printf("Sending message '%s'\n", message);
+        
+        if(temperature / 10 => 25)
+            print("Temperature trop haute !!!\n");
+        
+        if(temperature / 10 =< 20)
+            print("Temperature trop basse !!!\n");
 
         /* send the message here */
         if (semtech_loramac_send(&loramac,

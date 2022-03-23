@@ -1,0 +1,1 @@
+Notre projet ce trouve dans iot-lab-training/riot/lorawan dans les dossiers projet-iot-emission et projet-iot-reception.
