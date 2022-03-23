@@ -10,6 +10,7 @@ RIOTBASE ?= $(CURDIR)/../../RIOT
 # Here we add the modules that are needed
 #
 USEMODULE += ztimer_msec
+USEMODULE += hts221
 
 #
 # The application needs LoRaWAN related modules and variables:
@@ -26,3 +27,6 @@ LORA_REGION ?= EU868
 
 # This must be the last line of the Makefile
 include $(RIOTBASE)/Makefile.include
+
+
+include $(RIOTBASE)/dist/testbed-support/Makefile.iotlab

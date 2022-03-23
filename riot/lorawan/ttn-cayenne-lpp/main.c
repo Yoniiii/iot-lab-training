@@ -16,7 +16,7 @@
 #include "board.h"
 
 /* TODO: Add the cayenne_lpp header here */
-
+#include "cayenne_lpp.h"
 /* Declare globally the sx127x radio driver descriptor */
 static sx127x_t sx127x;
 
@@ -27,12 +27,12 @@ static semtech_loramac_t loramac;
 static hts221_t hts221;
 
 /* TODO: Declare globally Cayenne LPP descriptor here */
-
+static cayenne_lpp_t lpp;
 
 /* Device and application informations required for OTAA activation */
-static const uint8_t deveui[LORAMAC_DEVEUI_LEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static const uint8_t deveui[LORAMAC_DEVEUI_LEN] = { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x04, 0xD2, 0x0F };
 static const uint8_t appeui[LORAMAC_APPEUI_LEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-static const uint8_t appkey[LORAMAC_APPKEY_LEN] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+static const uint8_t appkey[LORAMAC_APPKEY_LEN] = { 0x69, 0x34, 0x17, 0x73, 0x5D, 0x0D, 0xFF, 0x01, 0x90, 0x5C, 0xD7, 0xF5, 0x4A, 0x87, 0x33, 0xCE };
 
 static void sender(void)
 {
@@ -51,17 +51,19 @@ static void sender(void)
         }
 
         /* TODO: prepare cayenne lpp payload here */
-
+        cayenne_lpp_add_temperature(&lpp, 0, (float)temperature / 10);
+        cayenne_lpp_add_relative_humidity(&lpp, 1, (float)humidity / 10);
 
         printf("Sending LPP data\n");
 
         /* send the LoRaWAN message */
-        uint8_t ret = semtech_loramac_send(&loramac, (uint8_t *)message, strlen(message));
+        uint8_t ret = semtech_loramac_send(&loramac, lpp.buffer, lpp.cursor);
         if (ret != SEMTECH_LORAMAC_TX_DONE) {
             printf("Cannot send lpp message, ret code: %d\n", ret);
         }
 
         /* TODO: clear buffer once done here */
+        cayenne_lpp_reset(&lpp);
     }
 
     /* this should never be reached */
